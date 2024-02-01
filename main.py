@@ -9,28 +9,27 @@ class Hangman:
     self._searchWord = ""
 
   def startGame(self):
-    self._searchWord = getpass.getpass("Gib das zu erratene Wort ein: ")
+    self._searchWord = getpass.getpass("Enter a word for the other player to guess: ").lower()
     while len(self._searchWord.split(" ")) > 1 or len(self._searchWord) == 0:
-      print("Das Wort muss ein Wort sein!")
-      self._searchWord = getpass.getpass("Gib das zu erratene Wort ein: ")
+      print("Input needs to be one word!")
+      self._searchWord = getpass.getpass("Enter a word for the other player to guess: ").lower()
     else:
-      self._searchWord = self._searchWord.lower()
-      print("Das Wort wurde erfolgreich eingegeben!\n")
+      print("Word saved successfully!\n")
 
       while self._gameRunning():
         print(
-            f"Das Wort sieht so aus: {self._getGuessed()}\nFails: {len(self._guessedFails)}/10\n"
+            f"Guess progress: {self._getGuessed()}\nFails: {len(self._guessedFails)}/10\n"
         )
         self._doGuess()
 
   def _gameRunning(self) -> bool:
     if (len(self._guessedFails) >= 10):
       print(
-          f"Zu viele Fehler! Du hast verloren!\nDas Wort war {self._searchWord}"
+          f"Too many fails: You lost!\nThe word was {self._searchWord}"
       )
       return False
     elif self._getGuessed() == self._searchWord:
-      print(f"Du hast das Wort erfolgreich erraten. Es war {self._searchWord}")
+      print(f"You guessed the word successfully. It was {self._searchWord}")
       return False
     else:
       return True
@@ -45,12 +44,12 @@ class Hangman:
     return guessString
 
   def _doGuess(self):
-    guess = input("Rate einen Buchstaben: ").lower()
+    guess = input("Guess a character: ").lower()
     while len(guess) > 1:
-      print("Ungültige Eingabe, bitte gib nur einen Buchstaben ein!")
-      guess = input("Rate einen Buchstaben: ")
+      print("Invalid input, please enter a single character!")
+      guess = input("Guess a character: ").lower()
     if guess in self._guessedFails or guess in self._guessedSuccess:
-      print("Du hast diesen Buchstaben bereits geraten!")
+      print("You already guessed this character!")
     else:
       if guess in self._searchWord:
         self._guessedSuccess.append(guess)
